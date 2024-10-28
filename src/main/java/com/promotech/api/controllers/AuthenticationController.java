@@ -1,11 +1,11 @@
-package com.promotech.api.controller;
+package com.promotech.api.controllers;
 
-import com.promotech.api.domain.user.AuthenticationDTO;
+import com.promotech.api.domain.user.LoginRequestDTO;
 import com.promotech.api.domain.user.LoginResponseDTO;
-import com.promotech.api.domain.user.RegisterDTO;
+import com.promotech.api.domain.user.RegisterRequestDTO;
 import com.promotech.api.domain.user.User;
-import com.promotech.api.repositoy.UserRepository;
-import com.promotech.api.services.TokenService;
+import com.promotech.api.repositories.UserRepository;
+import com.promotech.api.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
+    public ResponseEntity<Object> login(@RequestBody @Valid LoginRequestDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
         var token = tokenService.generateToken((User) auth.getPrincipal());
@@ -38,7 +38,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
+    public ResponseEntity<Object> register(@RequestBody @Valid RegisterRequestDTO data) {
         if (userRepository.findByUsername(data.username()) != null) {
             return ResponseEntity.badRequest().build();
         }

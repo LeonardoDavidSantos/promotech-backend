@@ -1,6 +1,6 @@
 package com.promotech.api.services;
 
-import com.promotech.api.repositoy.UserRepository;
+import com.promotech.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

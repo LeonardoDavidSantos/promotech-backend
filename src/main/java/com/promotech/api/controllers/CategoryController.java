@@ -1,6 +1,6 @@
-package com.promotech.api.controller;
+package com.promotech.api.controllers;
 
-import com.promotech.api.repositoy.CategoryRepository;
+import com.promotech.api.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

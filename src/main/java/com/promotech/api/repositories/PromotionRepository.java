@@ -1,4 +1,4 @@
-package com.promotech.api.repositoy;
+package com.promotech.api.repositories;
 
 import com.promotech.api.domain.promotion.Promotion;
 import org.springframework.data.jpa.repository.JpaRepository;
