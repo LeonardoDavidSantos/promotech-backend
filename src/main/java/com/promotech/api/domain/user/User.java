@@ -1,9 +1,8 @@
 package com.promotech.api.domain.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.promotech.api.domain.coupon.Coupon;
+import com.promotech.api.domain.promotion.Promotion;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,6 +27,12 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private UserRole role;
+
+    @OneToMany(mappedBy = "promotion")
+    private List<Promotion> promotions;
+
+    @OneToMany(mappedBy = "coupon")
+    private List<Coupon> coupons;
 
     public User(String username, String password, UserRole role) {
         this.username = username;

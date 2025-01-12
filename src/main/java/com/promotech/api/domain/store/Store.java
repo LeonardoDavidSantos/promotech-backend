@@ -1,11 +1,13 @@
 package com.promotech.api.domain.store;
 
+import com.promotech.api.domain.coupon.Coupon;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "store")
@@ -24,4 +26,7 @@ public class Store {
     private String imgUrl;
     private String linkUrl;
     private String tag;
+
+    @OneToMany(mappedBy = "coupon")
+    private List<Coupon> coupons;
 }

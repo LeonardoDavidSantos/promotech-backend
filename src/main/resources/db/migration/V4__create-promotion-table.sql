@@ -8,5 +8,9 @@ CREATE TABLE promotion (
 
     is_expired BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+    store_id UUID,
+    category_id UUID,
+    user_id UUID
 );
