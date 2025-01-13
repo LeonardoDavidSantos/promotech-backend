@@ -27,6 +27,6 @@ public class Store {
     private String linkUrl;
     private String tag;
 
-    @OneToMany(mappedBy = "coupon")
+    @OneToMany(mappedBy = "store")
     private List<Coupon> coupons;
 }

@@ -1,5 +1,7 @@
 package com.promotech.api.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.promotech.api.domain.coupon.Coupon;
 import com.promotech.api.domain.promotion.Promotion;
 import jakarta.persistence.*;
@@ -28,10 +30,12 @@ public class User implements UserDetails {
     private String password;
     private UserRole role;
 
-    @OneToMany(mappedBy = "promotion")
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Promotion> promotions;
 
-    @OneToMany(mappedBy = "coupon")
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Coupon> coupons;
 
     public User(String username, String password, UserRole role) {
