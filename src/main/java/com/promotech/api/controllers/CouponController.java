@@ -26,8 +26,9 @@ public class CouponController {
     }
 
     @GetMapping
-    ResponseEntity<Object> findAll() {
-        return ResponseEntity.ok(couponService.listAll());
+    ResponseEntity<Object> findAll(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(couponService.listAll(user));
     }
 
     @DeleteMapping("delete/{id}")

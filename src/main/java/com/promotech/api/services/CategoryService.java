@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CategoryService {
@@ -24,7 +26,11 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public List<CategoryResponseDTO> list() {
+    public List<CategoryResponseDTO> listAll() {
         return categoryRepository.findAll().stream().map(mapper::toDto).toList();
+    }
+
+    public Optional<Category> getById(UUID id) {
+        return categoryRepository.findById(id);
     }
 }

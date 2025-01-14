@@ -30,7 +30,6 @@ public class Coupon {
     private String description;
     private String code;
     private String linkUrl;
-    @ColumnDefault(value = "false")
     private Boolean isExpired;
 
     @CreationTimestamp

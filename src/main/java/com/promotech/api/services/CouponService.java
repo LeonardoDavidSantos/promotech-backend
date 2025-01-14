@@ -19,17 +19,19 @@ public class CouponService {
 
     @Autowired
     private CouponRepository couponRepository;
+
     @Autowired
     private CouponMapper mapper;
 
     public void create(CouponRequestDTO dto, User user) {
         Coupon coupon = mapper.toEntity(dto);
         coupon.setUser(user);
+        coupon.setIsExpired(false);
         couponRepository.save(coupon);
     }
 
-    public List<CouponResponseDTO> listAll() {
-        return couponRepository.findAll().stream().map(mapper::toDto).toList();
+    public List<CouponResponseDTO> listAll(User user) {
+        return couponRepository.findByUser(user).stream().map(mapper::toDto).toList();
     }
 
     public boolean delete(UUID id, User user) {
