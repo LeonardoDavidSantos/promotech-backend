@@ -28,11 +28,6 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity createCategory(@RequestBody @Valid CategoryRequestDTO categoryRequestDto) {
-        Category category = new Category();
-        category.setName(categoryRequestDto.name());
-        category.setDescription(categoryRequestDto.description());
-        category.setTag(categoryRequestDto.tag());
-
-        return ResponseEntity.ok(categoryRepository.save(category));
+        return ResponseEntity.ok().build();
     }
 }

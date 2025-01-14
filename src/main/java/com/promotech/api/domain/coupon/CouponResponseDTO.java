@@ -1,7 +1,7 @@
 package com.promotech.api.domain.coupon;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 
-public record CouponResponseDTO(UUID id, String title, String description, String code, String link_url, Date created_at) {
+public record CouponResponseDTO(UUID id, String title, String description, String code, String link_url, Boolean is_expired, Instant created_at) {
 }

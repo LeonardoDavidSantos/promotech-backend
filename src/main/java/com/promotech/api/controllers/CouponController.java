@@ -1,40 +1,42 @@
 package com.promotech.api.controllers;
 
-import com.promotech.api.domain.coupon.Coupon;
 import com.promotech.api.domain.coupon.CouponRequestDTO;
 import com.promotech.api.domain.user.User;
-import com.promotech.api.repositories.CouponRepository;
+import com.promotech.api.services.CouponService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("coupon")
 public class CouponController {
 
     @Autowired
-    private CouponRepository couponRepository;
-
+    private CouponService couponService;
 
     @PostMapping
-    ResponseEntity<Object> create(Authentication authentication, @RequestBody @Valid CouponRequestDTO couponRequestDto) {
-        User authUser = (User) authentication.getPrincipal();
-
-        Coupon newCoupon = new Coupon();
-        newCoupon.setUser(authUser);
-        newCoupon.setTitle(couponRequestDto.title());
-        newCoupon.setDescription(couponRequestDto.description());
-        newCoupon.setCode(couponRequestDto.code());
-        newCoupon.setLinkUrl(couponRequestDto.link_url());
-        newCoupon.setIsExpired(false);
-
-        return ResponseEntity.ok(couponRepository.save(newCoupon));
+    ResponseEntity<Object> create(Authentication authentication, @RequestBody @Valid CouponRequestDTO dto) {
+        User user = (User) authentication.getPrincipal();
+        couponService.create(dto, user);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    ResponseEntity<Object> findMany() {
-        return ResponseEntity.ok(couponRepository.findAll());
+    ResponseEntity<Object> findAll() {
+        return ResponseEntity.ok(couponService.listAll());
+    }
+
+    @DeleteMapping("delete/{id}")
+    ResponseEntity<Object> delete(Authentication authentication, @PathVariable UUID id) {
+        User user = (User) authentication.getPrincipal();
+        boolean deleted = couponService.delete(id, user);
+        if (deleted) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
