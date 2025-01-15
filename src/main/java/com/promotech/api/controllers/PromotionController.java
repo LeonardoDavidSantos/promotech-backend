@@ -5,6 +5,7 @@ import com.promotech.api.domain.promotion.PromotionUpdateDTO;
 import com.promotech.api.domain.user.User;
 import com.promotech.api.services.PromotionService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,25 +20,31 @@ public class PromotionController {
     @Autowired
     private PromotionService promotionService;
 
-    @GetMapping
-    public ResponseEntity<Object> getAllPromotions() {
+    @GetMapping("/list-all")
+    public ResponseEntity<Object> listAll() {
         return ResponseEntity.ok(promotionService.listAll());
     }
 
-    @PostMapping
-    public ResponseEntity<Object> createPromotion(Authentication auth, @RequestBody @Valid PromotionRequestDTO dto) {
+    @GetMapping("/belongs-to-user")
+    public ResponseEntity<Object> listBelongsToUser(Authentication auth) {
+        User user = (User) auth.getPrincipal();
+        return ResponseEntity.ok(promotionService.listBelongsToUser(user));
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Object> create(Authentication auth, @RequestBody @Valid PromotionRequestDTO dto) {
         User user = (User) auth.getPrincipal();
         return ResponseEntity.ok(promotionService.create(dto, user));
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Object> updatePromotion(Authentication auth, @RequestBody @Valid PromotionUpdateDTO dto, @PathVariable(name = "id") UUID id) {
+    public ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid PromotionUpdateDTO dto, @PathVariable(name = "id") @NotBlank UUID id) {
         User user = (User) auth.getPrincipal();
         return ResponseEntity.ok(promotionService.update(dto, id, user));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Object> deletePromotion(Authentication auth, @PathVariable(name = "id") UUID id) {
+    public ResponseEntity<Object> delete (Authentication auth, @PathVariable(name = "id") @NotBlank UUID id) {
         User user = (User) auth.getPrincipal();
         promotionService.delete(id, user);
         return ResponseEntity.ok().build();

@@ -21,9 +21,13 @@ public class CategoryService {
     @Autowired
     private CategoryMapper mapper;
 
-    public void create(CategoryRequestDTO dto) {
+    public Optional<CategoryResponseDTO> create(CategoryRequestDTO dto) {
         Category category = mapper.toEntity(dto);
-        categoryRepository.save(category);
+        return Optional.ofNullable(mapper.toDto(categoryRepository.save(category)));
+    }
+
+    public void delete(UUID categoryId) {
+        categoryRepository.deleteById(categoryId);
     }
 
     public List<CategoryResponseDTO> listAll() {

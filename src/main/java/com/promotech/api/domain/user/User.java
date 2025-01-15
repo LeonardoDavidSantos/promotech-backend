@@ -1,9 +1,5 @@
 package com.promotech.api.domain.user;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.promotech.api.domain.coupon.Coupon;
-import com.promotech.api.domain.promotion.Promotion;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,14 +25,6 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private UserRole role;
-
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-    private List<Promotion> promotions;
-
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-    private List<Coupon> coupons;
 
     public User(String username, String password, UserRole role) {
         this.username = username;

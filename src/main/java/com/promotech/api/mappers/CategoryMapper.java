@@ -3,12 +3,12 @@ package com.promotech.api.mappers;
 import com.promotech.api.domain.category.Category;
 import com.promotech.api.domain.category.CategoryRequestDTO;
 import com.promotech.api.domain.category.CategoryResponseDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.ERROR
+)
 public interface CategoryMapper {
 
     @Mappings({

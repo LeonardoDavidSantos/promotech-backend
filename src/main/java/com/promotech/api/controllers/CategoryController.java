@@ -1,27 +1,38 @@
 package com.promotech.api.controllers;
 
 import com.promotech.api.domain.category.CategoryRequestDTO;
-import com.promotech.api.repositories.CategoryRepository;
+import com.promotech.api.services.CategoryService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("category")
 public class CategoryController {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
-    @GetMapping("/list")
-    public ResponseEntity getAllCategories(Authentication authentication) {
-        return ResponseEntity.ok().build();
+    @GetMapping("/list-all")
+    public ResponseEntity<Object> listAll() {
+        return ResponseEntity.ok(categoryService.listAll());
     }
 
-    @PostMapping
-    public ResponseEntity createCategory(@RequestBody @Valid CategoryRequestDTO categoryRequestDto) {
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Object> create(@RequestBody @Valid CategoryRequestDTO dto) {
+        return ResponseEntity.ok(categoryService.create(dto));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Object> delete(@PathVariable(name = "id") @NotBlank UUID id) {
+        categoryService.delete(id);
         return ResponseEntity.ok().build();
     }
 }

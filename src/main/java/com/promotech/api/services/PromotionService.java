@@ -35,8 +35,6 @@ public class PromotionService {
         if (category.isEmpty() || store.isEmpty()) {
             return Optional.empty();
         }
-
-        /* Criação e salvamento da promoção */
         Promotion promotion = mapper.toEntity(dto);
         promotion.setUser(user);
         promotion.setCategory(category.get());
@@ -77,6 +75,10 @@ public class PromotionService {
 
     public List<PromotionResponseDTO> listAll() {
         return promotionRepository.findAll().stream().map(mapper::toDto).toList();
+    }
+
+    public List<PromotionResponseDTO> listBelongsToUser(User user) {
+        return promotionRepository.findByUser(user).stream().map(mapper::toDto).toList();
     }
 
     private boolean belongsToUser(User user, Promotion promotion) {

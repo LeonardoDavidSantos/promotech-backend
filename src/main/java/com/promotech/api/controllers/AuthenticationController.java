@@ -1,15 +1,14 @@
 package com.promotech.api.controllers;
 
-import com.promotech.api.domain.user.LoginRequestDTO;
-import com.promotech.api.domain.user.LoginResponseDTO;
-import com.promotech.api.domain.user.RegisterRequestDTO;
+import com.promotech.api.domain.user.dto.LoginRequestDTO;
+import com.promotech.api.domain.user.dto.LoginResponseDTO;
+import com.promotech.api.domain.user.dto.RegisterRequestDTO;
 import com.promotech.api.domain.user.User;
 import com.promotech.api.repositories.UserRepository;
 import com.promotech.api.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
