@@ -1,7 +1,7 @@
 package com.promotech.api.controllers;
 
-import com.promotech.api.domain.promotion.PromotionRequestDTO;
-import com.promotech.api.domain.promotion.PromotionUpdateDTO;
+import com.promotech.api.domain.promotion.dto.PromotionRequestDTO;
+import com.promotech.api.domain.promotion.dto.PromotionUpdateDTO;
 import com.promotech.api.domain.user.User;
 import com.promotech.api.services.PromotionService;
 import jakarta.validation.Valid;
@@ -25,10 +25,9 @@ public class PromotionController {
         return ResponseEntity.ok(promotionService.listAll());
     }
 
-    @GetMapping("/belongs-to-user")
-    public ResponseEntity<Object> listBelongsToUser(Authentication auth) {
-        User user = (User) auth.getPrincipal();
-        return ResponseEntity.ok(promotionService.listBelongsToUser(user));
+    @GetMapping("/list-from-user/{id}")
+    public ResponseEntity<Object> listFromUser(@PathVariable(name = "id") @NotBlank UUID id) {
+        return ResponseEntity.ok(promotionService.listFromUser(id));
     }
 
     @PostMapping("/create")

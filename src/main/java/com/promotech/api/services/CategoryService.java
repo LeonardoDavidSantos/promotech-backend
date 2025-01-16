@@ -1,8 +1,8 @@
 package com.promotech.api.services;
 
 import com.promotech.api.domain.category.Category;
-import com.promotech.api.domain.category.CategoryRequestDTO;
-import com.promotech.api.domain.category.CategoryResponseDTO;
+import com.promotech.api.domain.category.dto.CategoryRequestDTO;
+import com.promotech.api.domain.category.dto.CategoryResponseDTO;
 import com.promotech.api.mappers.CategoryMapper;
 import com.promotech.api.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;

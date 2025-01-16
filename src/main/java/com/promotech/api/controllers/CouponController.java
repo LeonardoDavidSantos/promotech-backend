@@ -1,7 +1,7 @@
 package com.promotech.api.controllers;
 
-import com.promotech.api.domain.coupon.CouponRequestDTO;
-import com.promotech.api.domain.coupon.CouponUpdateDTO;
+import com.promotech.api.domain.coupon.dto.CouponRequestDTO;
+import com.promotech.api.domain.coupon.dto.CouponUpdateDTO;
 import com.promotech.api.domain.user.User;
 import com.promotech.api.services.CouponService;
 import jakarta.validation.Valid;
@@ -25,10 +25,9 @@ public class CouponController {
         return ResponseEntity.ok(couponService.listAll());
     }
 
-    @GetMapping("/belongs-to-user")
-    ResponseEntity<Object> listAllBelongsToUser(Authentication auth) {
-        User user = (User) auth.getPrincipal();
-        return ResponseEntity.ok(couponService.listBelongsToUser(user));
+    @GetMapping("/list-from-user/{id}")
+    ResponseEntity<Object> listFromUser(@PathVariable(name = "id") @NotBlank UUID id) {
+        return ResponseEntity.ok(couponService.listFromUser(id));
     }
 
     @PostMapping("/create")
@@ -38,7 +37,7 @@ public class CouponController {
     }
 
     @PutMapping("/update/{id}")
-    ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid CouponUpdateDTO dto, @PathVariable @NotBlank UUID id) {
+    ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid CouponUpdateDTO dto, @PathVariable(name = "id") @NotBlank UUID id) {
         User user = (User) auth.getPrincipal();
         return ResponseEntity.ok(couponService.update(dto, id, user));
     }

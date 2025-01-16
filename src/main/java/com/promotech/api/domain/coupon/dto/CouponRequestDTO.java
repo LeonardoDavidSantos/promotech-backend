@@ -1,4 +1,4 @@
-package com.promotech.api.domain.coupon;
+package com.promotech.api.domain.coupon.dto;
 
 import java.util.UUID;
 

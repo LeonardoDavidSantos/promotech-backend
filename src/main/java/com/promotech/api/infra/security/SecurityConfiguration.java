@@ -27,9 +27,20 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/**").authenticated()
+
+                        .requestMatchers(HttpMethod.GET, "/promotion/list-all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/store/list-all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/category/list-all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/coupon/list-all").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/promotion/list-from-user/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/coupon/list-from-user/**").permitAll()
+
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

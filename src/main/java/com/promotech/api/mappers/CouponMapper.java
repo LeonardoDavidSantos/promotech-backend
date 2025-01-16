@@ -1,14 +1,15 @@
 package com.promotech.api.mappers;
 
 import com.promotech.api.domain.coupon.Coupon;
-import com.promotech.api.domain.coupon.CouponRequestDTO;
-import com.promotech.api.domain.coupon.CouponResponseDTO;
-import com.promotech.api.domain.coupon.CouponUpdateDTO;
+import com.promotech.api.domain.coupon.dto.CouponRequestDTO;
+import com.promotech.api.domain.coupon.dto.CouponResponseDTO;
+import com.promotech.api.domain.coupon.dto.CouponUpdateDTO;
 import org.mapstruct.*;
 
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
-        unmappedTargetPolicy = ReportingPolicy.ERROR
+        unmappedTargetPolicy = ReportingPolicy.ERROR,
+        uses = {StoreMapper.class, UserMapper.class}
 )
 public interface CouponMapper {
 
@@ -37,7 +38,8 @@ public interface CouponMapper {
             @Mapping(source = "createdAt", target = "created_at"),
 
             // this is safe, User -> UserPreviewDTO was in UserMapper
-            @Mapping(source = "user", target = "user")
+            @Mapping(source = "user", target = "user"),
+            @Mapping(source = "store", target = "store")
     })
     CouponResponseDTO toDto(Coupon entity);
 

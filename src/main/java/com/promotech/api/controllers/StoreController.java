@@ -1,7 +1,7 @@
 package com.promotech.api.controllers;
 
-import com.promotech.api.domain.store.StoreRequestDTO;
-import com.promotech.api.domain.store.StoreUpdateDTO;
+import com.promotech.api.domain.store.dto.StoreRequestDTO;
+import com.promotech.api.domain.store.dto.StoreUpdateDTO;
 import com.promotech.api.services.StoreService;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;

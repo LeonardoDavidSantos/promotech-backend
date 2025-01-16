@@ -1,8 +1,8 @@
 package com.promotech.api.mappers;
 
 import com.promotech.api.domain.category.Category;
-import com.promotech.api.domain.category.CategoryRequestDTO;
-import com.promotech.api.domain.category.CategoryResponseDTO;
+import com.promotech.api.domain.category.dto.CategoryRequestDTO;
+import com.promotech.api.domain.category.dto.CategoryResponseDTO;
 import org.mapstruct.*;
 
 @Mapper(

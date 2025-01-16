@@ -1,6 +1,6 @@
 package com.promotech.api.controllers;
 
-import com.promotech.api.domain.category.CategoryRequestDTO;
+import com.promotech.api.domain.category.dto.CategoryRequestDTO;
 import com.promotech.api.services.CategoryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

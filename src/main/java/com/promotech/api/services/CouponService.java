@@ -1,13 +1,14 @@
 package com.promotech.api.services;
 
 import com.promotech.api.domain.coupon.Coupon;
-import com.promotech.api.domain.coupon.CouponRequestDTO;
-import com.promotech.api.domain.coupon.CouponResponseDTO;
-import com.promotech.api.domain.coupon.CouponUpdateDTO;
+import com.promotech.api.domain.coupon.dto.CouponRequestDTO;
+import com.promotech.api.domain.coupon.dto.CouponResponseDTO;
+import com.promotech.api.domain.coupon.dto.CouponUpdateDTO;
 import com.promotech.api.domain.store.Store;
 import com.promotech.api.domain.user.User;
 import com.promotech.api.mappers.CouponMapper;
 import com.promotech.api.repositories.CouponRepository;
+import com.promotech.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ public class CouponService {
 
     @Autowired
     private CouponRepository couponRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     private StoreService storeService;
 
@@ -41,9 +44,9 @@ public class CouponService {
     }
 
     public void delete(UUID couponId, User user) {
-        Optional<Coupon> coupon = couponRepository.findById(couponId);
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow();
 
-        if (coupon.isPresent() && this.belongsToUser(user, coupon.get())) {
+        if (this.belongsToUser(user, coupon) || user.isAdmin()) {
             couponRepository.deleteById(couponId);
         }
     }
@@ -67,7 +70,8 @@ public class CouponService {
         return couponRepository.findAll().stream().map(mapper::toDto).toList();
     }
 
-    public List<CouponResponseDTO> listBelongsToUser(User user) {
+    public List<CouponResponseDTO> listFromUser(UUID id) {
+        User user = userRepository.findById(id).orElseThrow();
         return couponRepository.findByUser(user).stream().map(mapper::toDto).toList();
     }
 

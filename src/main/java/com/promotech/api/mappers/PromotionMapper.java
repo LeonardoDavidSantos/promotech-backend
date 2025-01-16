@@ -1,14 +1,15 @@
 package com.promotech.api.mappers;
 
 import com.promotech.api.domain.promotion.Promotion;
-import com.promotech.api.domain.promotion.PromotionRequestDTO;
-import com.promotech.api.domain.promotion.PromotionResponseDTO;
-import com.promotech.api.domain.promotion.PromotionUpdateDTO;
+import com.promotech.api.domain.promotion.dto.PromotionRequestDTO;
+import com.promotech.api.domain.promotion.dto.PromotionResponseDTO;
+import com.promotech.api.domain.promotion.dto.PromotionUpdateDTO;
 import org.mapstruct.*;
 
 @Mapper(
 		componentModel = MappingConstants.ComponentModel.SPRING,
-		unmappedTargetPolicy = ReportingPolicy.ERROR
+		unmappedTargetPolicy = ReportingPolicy.ERROR,
+		uses = {StoreMapper.class, UserMapper.class}
 )
 public interface PromotionMapper {
 
@@ -38,8 +39,11 @@ public interface PromotionMapper {
 			@Mapping(source = "imgUrl", target = "img_url"),
 			@Mapping(source = "linkUrl", target = "link_url"),
 			@Mapping(source = "price", target = "price"),
+			@Mapping(source = "category.tag", target = "category_tag"),
+
 			// this is safe, User -> UserPreviewDTO was in UserMapper
-			@Mapping(source = "user", target = "user")
+			@Mapping(source = "user", target = "user"),
+			@Mapping(source = "store", target = "store")
 	})
 	PromotionResponseDTO toDto(Promotion entity);
 

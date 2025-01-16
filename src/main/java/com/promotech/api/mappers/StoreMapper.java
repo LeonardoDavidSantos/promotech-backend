@@ -1,9 +1,10 @@
 package com.promotech.api.mappers;
 
 import com.promotech.api.domain.store.Store;
-import com.promotech.api.domain.store.StoreRequestDTO;
-import com.promotech.api.domain.store.StoreResponseDTO;
-import com.promotech.api.domain.store.StoreUpdateDTO;
+import com.promotech.api.domain.store.dto.StorePreviewDTO;
+import com.promotech.api.domain.store.dto.StoreRequestDTO;
+import com.promotech.api.domain.store.dto.StoreResponseDTO;
+import com.promotech.api.domain.store.dto.StoreUpdateDTO;
 import org.mapstruct.*;
 
 @Mapper(
@@ -40,4 +41,11 @@ public interface StoreMapper {
             @Mapping(source = "tag", target = "tag"),
     })
     void updateEntityFromDto(StoreUpdateDTO dto, @MappingTarget Store entity);
+
+    @Mappings({
+            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "tag", target = "tag"),
+            @Mapping(source = "imgUrl", target = "img_url"),
+    })
+    StorePreviewDTO toStorePreviewDto(Store entity);
 }

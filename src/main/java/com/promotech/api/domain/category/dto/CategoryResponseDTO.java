@@ -1,4 +1,4 @@
-package com.promotech.api.domain.category;
+package com.promotech.api.domain.category.dto;
 
 import java.util.UUID;
 

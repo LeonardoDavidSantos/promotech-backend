@@ -2,13 +2,14 @@ package com.promotech.api.services;
 
 import com.promotech.api.domain.category.Category;
 import com.promotech.api.domain.promotion.Promotion;
-import com.promotech.api.domain.promotion.PromotionRequestDTO;
-import com.promotech.api.domain.promotion.PromotionResponseDTO;
-import com.promotech.api.domain.promotion.PromotionUpdateDTO;
+import com.promotech.api.domain.promotion.dto.PromotionRequestDTO;
+import com.promotech.api.domain.promotion.dto.PromotionResponseDTO;
+import com.promotech.api.domain.promotion.dto.PromotionUpdateDTO;
 import com.promotech.api.domain.store.Store;
 import com.promotech.api.domain.user.User;
 import com.promotech.api.mappers.PromotionMapper;
 import com.promotech.api.repositories.PromotionRepository;
+import com.promotech.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,8 @@ public class PromotionService {
 
     @Autowired
     private PromotionRepository promotionRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     private CategoryService categoryService;
     private StoreService storeService;
@@ -45,9 +48,9 @@ public class PromotionService {
     }
 
     public void delete(UUID promotionId, User user) {
-        Optional<Promotion> promotion = promotionRepository.findById(promotionId);
+        Promotion promotion = promotionRepository.findById(promotionId).orElseThrow();
 
-        if (promotion.isPresent() && this.belongsToUser(user, promotion.get())) {
+        if (this.belongsToUser(user, promotion) || user.isAdmin()) {
             promotionRepository.deleteById(promotionId);
         }
     }
@@ -77,7 +80,8 @@ public class PromotionService {
         return promotionRepository.findAll().stream().map(mapper::toDto).toList();
     }
 
-    public List<PromotionResponseDTO> listBelongsToUser(User user) {
+    public List<PromotionResponseDTO> listFromUser(UUID id) {
+        User user = userRepository.findById(id).orElseThrow();
         return promotionRepository.findByUser(user).stream().map(mapper::toDto).toList();
     }
 

@@ -1,10 +1,9 @@
 package com.promotech.api.services;
 
 import com.promotech.api.domain.store.Store;
-import com.promotech.api.domain.store.StoreRequestDTO;
-import com.promotech.api.domain.store.StoreResponseDTO;
-import com.promotech.api.domain.store.StoreUpdateDTO;
-import com.promotech.api.domain.user.User;
+import com.promotech.api.domain.store.dto.StoreRequestDTO;
+import com.promotech.api.domain.store.dto.StoreResponseDTO;
+import com.promotech.api.domain.store.dto.StoreUpdateDTO;
 import com.promotech.api.mappers.StoreMapper;
 import com.promotech.api.repositories.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
