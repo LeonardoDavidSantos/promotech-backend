@@ -23,7 +23,7 @@ public interface StoreMapper {
     Store toEntity(StoreRequestDTO dto);
 
     @Mappings({
-            @Mapping(target = "id", ignore = true),
+            @Mapping(source = "id", target = "id"),
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "description", target = "description"),
             @Mapping(source = "imgUrl", target = "img_url"),

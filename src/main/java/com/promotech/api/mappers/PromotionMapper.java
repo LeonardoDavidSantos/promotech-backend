@@ -31,9 +31,8 @@ public interface PromotionMapper {
 	Promotion toEntity(PromotionRequestDTO dto);
 
 	@Mappings({
-			@Mapping(target = "id", ignore = true),
-			@Mapping(target = "created_at", ignore = true),
-
+			@Mapping(source = "id", target = "id"),
+			@Mapping(source = "createdAt", target = "created_at"),
 			@Mapping(source = "title", target = "title"),
 			@Mapping(source = "description", target = "description"),
 			@Mapping(source = "imgUrl", target = "img_url"),

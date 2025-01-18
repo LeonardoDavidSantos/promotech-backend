@@ -25,9 +25,11 @@ public class UserService {
     public LoginResponseDTO authenticate(LoginRequestDTO dto) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.username(), dto.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
-        var token = tokenService.generateToken((User) auth.getPrincipal());
+        // get logged-in user
+        User user = (User) auth.getPrincipal();
+        var token = tokenService.generateToken(user);
 
-        return new LoginResponseDTO(token);
+        return new LoginResponseDTO(token, user.getUsername(), user.getRole());
     }
 
     public void register(RegisterRequestDTO dto) {

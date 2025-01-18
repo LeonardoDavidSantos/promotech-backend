@@ -36,7 +36,7 @@ public class PromotionController {
         return ResponseEntity.ok(promotionService.create(dto, user));
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid PromotionUpdateDTO dto, @PathVariable(name = "id") @NotBlank UUID id) {
         User user = (User) auth.getPrincipal();
         return ResponseEntity.ok(promotionService.update(dto, id, user));
