@@ -26,10 +26,15 @@ public class User implements UserDetails {
     private String password;
     private UserRole role;
 
-    public User(String username, String password, UserRole role) {
+    private String fullName;
+    private String email;
+
+    public User(String username, String password, UserRole role, String fullName, String email) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.fullName = fullName;
+        this.email = email;
     }
 
     public boolean isAdmin() {

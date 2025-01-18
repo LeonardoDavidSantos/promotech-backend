@@ -1,6 +1,4 @@
 package com.promotech.api.domain.user.dto;
 
-import com.promotech.api.domain.user.UserRole;
-
-public record RegisterRequestDTO(String username, String password, UserRole role) {
+public record RegisterRequestDTO(String username, String password, String full_name, String email) {
 }

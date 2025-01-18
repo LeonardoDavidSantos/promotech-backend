@@ -2,10 +2,8 @@ package com.promotech.api.mappers;
 
 import com.promotech.api.domain.user.User;
 import com.promotech.api.domain.user.dto.UserPreviewDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.ReportingPolicy;
+import com.promotech.api.domain.user.dto.UserResponseDTO;
+import org.mapstruct.*;
 
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
@@ -16,4 +14,13 @@ public interface UserMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "username", target = "username")
     UserPreviewDTO toUserPreviewDto(User user);
+
+    @Mappings({
+            @Mapping(source = "id", target = "id"),
+            @Mapping(source = "username", target = "username"),
+            @Mapping(source = "role", target = "role"),
+            @Mapping(source = "fullName", target = "full_name"),
+            @Mapping(source = "email", target = "email")
+    })
+    UserResponseDTO toDto(User user);
 }
