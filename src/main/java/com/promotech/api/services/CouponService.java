@@ -10,6 +10,7 @@ import com.promotech.api.mappers.CouponMapper;
 import com.promotech.api.repositories.CouponRepository;
 import com.promotech.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class CouponService {
     private CouponRepository couponRepository;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
     private StoreService storeService;
 
     @Autowired
@@ -33,7 +34,7 @@ public class CouponService {
         Optional<Store> store = storeService.getById(dto.store_id());
 
         if (store.isEmpty()) {
-            return Optional.empty();
+            throw new IllegalArgumentException("Invalid store");
         }
         Coupon coupon = mapper.toEntity(dto);
         coupon.setUser(user);
@@ -51,12 +52,16 @@ public class CouponService {
         }
     }
 
-    public Optional<CouponResponseDTO> update(CouponUpdateDTO dto, UUID couponId, User user) {
+    public Optional<CouponResponseDTO> update(CouponUpdateDTO dto, UUID couponId, User user) throws IllegalArgumentException, IllegalAccessException
+    {
         Optional<Coupon> coupon = couponRepository.findById(couponId);
         Optional<Store> store = storeService.getById(dto.store_id());
 
-        if (store.isEmpty() || coupon.isEmpty() || !this.belongsToUser(user, coupon.get())) {
-            return Optional.empty();
+        if (store.isEmpty() || coupon.isEmpty()) {
+            throw new IllegalArgumentException("Invalid coupon or store");
+        }
+        if (!this.belongsToUser(user, coupon.get())) {
+            throw new IllegalAccessException("Coupon dont belongs to user");
         }
 
         Coupon dbCoupon = coupon.get();

@@ -43,6 +43,7 @@ public interface StoreMapper {
     void updateEntityFromDto(StoreUpdateDTO dto, @MappingTarget Store entity);
 
     @Mappings({
+            @Mapping(source = "id", target = "id"),
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "tag", target = "tag"),
             @Mapping(source = "imgUrl", target = "img_url"),

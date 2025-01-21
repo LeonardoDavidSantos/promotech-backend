@@ -5,8 +5,8 @@ import com.promotech.api.domain.promotion.dto.PromotionUpdateDTO;
 import com.promotech.api.domain.user.User;
 import com.promotech.api.services.PromotionService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class PromotionController {
     }
 
     @GetMapping("/list-from-user/{id}")
-    public ResponseEntity<Object> listFromUser(@PathVariable(name = "id") @NotBlank UUID id) {
+    public ResponseEntity<Object> listFromUser(@PathVariable(name = "id") UUID id) {
         return ResponseEntity.ok(promotionService.listFromUser(id));
     }
 
@@ -37,15 +37,20 @@ public class PromotionController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid PromotionUpdateDTO dto, @PathVariable(name = "id") @NotBlank UUID id) {
+    public ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid PromotionUpdateDTO dto, @PathVariable(name = "id") UUID id) throws  IllegalAccessException {
         User user = (User) auth.getPrincipal();
         return ResponseEntity.ok(promotionService.update(dto, id, user));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Object> delete (Authentication auth, @PathVariable(name = "id") @NotBlank UUID id) {
+    public ResponseEntity<Object> delete (Authentication auth, @PathVariable(name = "id") UUID id) {
         User user = (User) auth.getPrincipal();
         promotionService.delete(id, user);
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(IllegalAccessException.class)
+    public ResponseEntity<Object> handleDeniedException(final IllegalAccessException ex) {
+        return new ResponseEntity("Access Denied", HttpStatus.UNAUTHORIZED);
     }
 }

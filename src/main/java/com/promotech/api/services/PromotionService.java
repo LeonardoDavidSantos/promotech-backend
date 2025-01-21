@@ -25,7 +25,9 @@ public class PromotionService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     private CategoryService categoryService;
+    @Autowired
     private StoreService storeService;
 
     @Autowired
@@ -36,7 +38,7 @@ public class PromotionService {
         Optional<Store> store = storeService.getById(dto.store_id());
 
         if (category.isEmpty() || store.isEmpty()) {
-            return Optional.empty();
+            throw new IllegalArgumentException("Invalid store or category");
         }
         Promotion promotion = mapper.toEntity(dto);
         promotion.setUser(user);
@@ -55,16 +57,17 @@ public class PromotionService {
         }
     }
 
-    public Optional<PromotionResponseDTO> update(PromotionUpdateDTO dto, UUID promotionId, User user) {
+    public Optional<PromotionResponseDTO> update(PromotionUpdateDTO dto, UUID promotionId, User user) throws IllegalArgumentException, IllegalAccessException
+    {
         Optional<Promotion> promotion = promotionRepository.findById(promotionId);
         Optional<Category> category = categoryService.getById(dto.category_id());
         Optional<Store> store = storeService.getById(dto.store_id());
 
-        if (
-            promotion.isEmpty() || category.isEmpty() || store.isEmpty() ||
-            !this.belongsToUser(user, promotion.get())
-        ) {
-            return Optional.empty();
+        if (promotion.isEmpty() || category.isEmpty() || store.isEmpty()) {
+            throw new IllegalArgumentException("Invalid promotion, category or store");
+        }
+        if (!this.belongsToUser(user, promotion.get())) {
+            throw new IllegalAccessException("Promotion don't belongs to user");
         }
 
         Promotion dbPromotion = promotion.get();

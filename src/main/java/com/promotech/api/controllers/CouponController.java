@@ -5,9 +5,11 @@ import com.promotech.api.domain.coupon.dto.CouponUpdateDTO;
 import com.promotech.api.domain.user.User;
 import com.promotech.api.services.CouponService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +28,7 @@ public class CouponController {
     }
 
     @GetMapping("/list-from-user/{id}")
-    ResponseEntity<Object> listFromUser(@PathVariable(name = "id") @NotBlank UUID id) {
+    ResponseEntity<Object> listFromUser(@PathVariable(name = "id") UUID id) {
         return ResponseEntity.ok(couponService.listFromUser(id));
     }
 
@@ -37,15 +39,20 @@ public class CouponController {
     }
 
     @PutMapping("/update/{id}")
-    ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid CouponUpdateDTO dto, @PathVariable(name = "id") @NotBlank UUID id) {
+    ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid CouponUpdateDTO dto, @PathVariable(name = "id") UUID id) throws IllegalAccessException {
         User user = (User) auth.getPrincipal();
         return ResponseEntity.ok(couponService.update(dto, id, user));
     }
 
     @DeleteMapping("/delete/{id}")
-    ResponseEntity<Object> delete(Authentication auth, @PathVariable @NotBlank UUID id) {
+    ResponseEntity<Object> delete(Authentication auth, @PathVariable UUID id) {
         User user = (User) auth.getPrincipal();
         couponService.delete(id, user);
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(IllegalAccessException.class)
+    public ResponseEntity<Object> handleDeniedException(final IllegalAccessException ex) {
+        return new ResponseEntity("Access Denied", HttpStatus.UNAUTHORIZED);
     }
 }

@@ -1,6 +1,7 @@
 package com.promotech.api.mappers;
 
 import com.promotech.api.domain.category.Category;
+import com.promotech.api.domain.category.dto.CategoryPreviewDTO;
 import com.promotech.api.domain.category.dto.CategoryRequestDTO;
 import com.promotech.api.domain.category.dto.CategoryResponseDTO;
 import org.mapstruct.*;
@@ -26,4 +27,11 @@ public interface CategoryMapper {
             @Mapping(source = "tag", target = "tag")
     })
     CategoryResponseDTO toDto(Category entity);
+
+    @Mappings({
+            @Mapping(source = "id", target = "id"),
+            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "tag", target = "tag")
+    })
+    CategoryPreviewDTO toCategoryPreviewDto(Category entity);
 }

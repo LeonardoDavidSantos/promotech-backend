@@ -7,6 +7,7 @@ import com.promotech.api.domain.user.dto.LoginResponseDTO;
 import com.promotech.api.domain.user.dto.RegisterRequestDTO;
 import com.promotech.api.infra.security.TokenService;
 import com.promotech.api.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,8 +17,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
     private TokenService tokenService;
 
     @Value("${api.security.admin.password}")

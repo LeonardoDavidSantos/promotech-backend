@@ -9,7 +9,7 @@ import org.mapstruct.*;
 @Mapper(
 		componentModel = MappingConstants.ComponentModel.SPRING,
 		unmappedTargetPolicy = ReportingPolicy.ERROR,
-		uses = {StoreMapper.class, UserMapper.class}
+		uses = {StoreMapper.class, CategoryMapper.class, UserMapper.class}
 )
 public interface PromotionMapper {
 
@@ -38,7 +38,7 @@ public interface PromotionMapper {
 			@Mapping(source = "imgUrl", target = "img_url"),
 			@Mapping(source = "linkUrl", target = "link_url"),
 			@Mapping(source = "price", target = "price"),
-			@Mapping(source = "category.tag", target = "category_tag"),
+			@Mapping(source = "category", target = "category"),
 
 			// this is safe, User -> UserPreviewDTO was in UserMapper
 			@Mapping(source = "user", target = "user"),

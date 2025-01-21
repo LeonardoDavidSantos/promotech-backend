@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.UUID;
@@ -28,9 +30,11 @@ public class Promotion {
     private Float price;
     private String imgUrl;
     private String linkUrl;
-
     private Boolean isExpired;
+
+    @CreationTimestamp
     private Date createdAt;
+    @UpdateTimestamp
     private Date updatedAt;
 
     @ManyToOne

@@ -3,7 +3,6 @@ package com.promotech.api.controllers;
 import com.promotech.api.domain.category.dto.CategoryRequestDTO;
 import com.promotech.api.services.CategoryService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +30,7 @@ public class CategoryController {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Object> delete(@PathVariable(name = "id") @NotBlank UUID id) {
+    public ResponseEntity<Object> delete(@PathVariable(name = "id") UUID id) {
         categoryService.delete(id);
         return ResponseEntity.ok().build();
     }
