@@ -36,6 +36,7 @@ public interface CouponMapper {
             @Mapping(source = "linkUrl", target = "link_url"),
             @Mapping(source = "isExpired", target = "is_expired"),
             @Mapping(source = "createdAt", target = "created_at"),
+            @Mapping(source = "updatedAt", target = "updated_at"),
 
             // this is safe, User -> UserPreviewDTO was in UserMapper
             @Mapping(source = "user", target = "user"),

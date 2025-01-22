@@ -11,7 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 
 @Table(name = "promotion")
@@ -33,9 +33,9 @@ public class Promotion {
     private Boolean isExpired;
 
     @CreationTimestamp
-    private Date createdAt;
+    private Instant createdAt;
     @UpdateTimestamp
-    private Date updatedAt;
+    private Instant updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "store_id")

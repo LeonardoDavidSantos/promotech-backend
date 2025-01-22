@@ -6,10 +6,8 @@ import com.promotech.api.domain.user.User;
 import com.promotech.api.services.CouponService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,13 +31,13 @@ public class CouponController {
     }
 
     @PostMapping("/create")
-    ResponseEntity<Object> create(Authentication auth, @RequestBody @Valid CouponRequestDTO dto) {
+    ResponseEntity<Object> create(Authentication auth, @RequestBody @Valid CouponRequestDTO dto) throws IllegalArgumentException {
         User user = (User) auth.getPrincipal();
         return ResponseEntity.ok(couponService.create(dto, user));
     }
 
     @PutMapping("/update/{id}")
-    ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid CouponUpdateDTO dto, @PathVariable(name = "id") UUID id) throws IllegalAccessException {
+    ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid CouponUpdateDTO dto, @PathVariable(name = "id") UUID id) throws IllegalAccessException, IllegalArgumentException {
         User user = (User) auth.getPrincipal();
         return ResponseEntity.ok(couponService.update(dto, id, user));
     }
@@ -53,6 +51,11 @@ public class CouponController {
 
     @ExceptionHandler(IllegalAccessException.class)
     public ResponseEntity<Object> handleDeniedException(final IllegalAccessException ex) {
-        return new ResponseEntity("Access Denied", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity("Access Denied: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleArgumentException(final IllegalAccessException ex) {
+        return new ResponseEntity("Illegal Argument: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

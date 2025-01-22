@@ -10,6 +10,7 @@ import com.promotech.api.mappers.CouponMapper;
 import com.promotech.api.repositories.CouponRepository;
 import com.promotech.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -30,15 +31,14 @@ public class CouponService {
     @Autowired
     private CouponMapper mapper;
 
-    public Optional<CouponResponseDTO> create(CouponRequestDTO dto, User user) {
-        Optional<Store> store = storeService.getById(dto.store_id());
+    public Optional<CouponResponseDTO> create(CouponRequestDTO dto, User user) throws IllegalArgumentException {
+        Store store = storeService.getById(dto.store_id()).orElseThrow(
+                () -> new IllegalArgumentException("Invalid store UUID")
+        );
 
-        if (store.isEmpty()) {
-            throw new IllegalArgumentException("Invalid store");
-        }
         Coupon coupon = mapper.toEntity(dto);
         coupon.setUser(user);
-        coupon.setStore(store.get());
+        coupon.setStore(store);
         coupon.setIsExpired(false);
 
         return Optional.ofNullable(mapper.toDto(couponRepository.save(coupon)));
@@ -54,25 +54,24 @@ public class CouponService {
 
     public Optional<CouponResponseDTO> update(CouponUpdateDTO dto, UUID couponId, User user) throws IllegalArgumentException, IllegalAccessException
     {
-        Optional<Coupon> coupon = couponRepository.findById(couponId);
-        Optional<Store> store = storeService.getById(dto.store_id());
-
-        if (store.isEmpty() || coupon.isEmpty()) {
-            throw new IllegalArgumentException("Invalid coupon or store");
-        }
-        if (!this.belongsToUser(user, coupon.get())) {
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow(
+                () -> new IllegalArgumentException("Invalid coupon UUID")
+        );
+        Store store = storeService.getById(dto.store_id()).orElseThrow(
+                () -> new IllegalArgumentException("Invalid store UUID")
+        );
+        if (!this.belongsToUser(user, coupon)) {
             throw new IllegalAccessException("Coupon dont belongs to user");
         }
+        mapper.updateEntityFromDto(dto, coupon);
+        coupon.setStore(store);
 
-        Coupon dbCoupon = coupon.get();
-        mapper.updateEntityFromDto(dto, dbCoupon);
-        dbCoupon.setStore(store.get());
-
-        return Optional.ofNullable(mapper.toDto(couponRepository.save(dbCoupon)));
+        return Optional.ofNullable(mapper.toDto(couponRepository.save(coupon)));
     }
 
     public List<CouponResponseDTO> listAll() {
-        return couponRepository.findAll().stream().map(mapper::toDto).toList();
+        return couponRepository.findAll(sortByCreation())
+                .stream().map(mapper::toDto).toList();
     }
 
     public List<CouponResponseDTO> listFromUser(UUID id) {
@@ -83,5 +82,9 @@ public class CouponService {
     private boolean belongsToUser(User user, Coupon coupon) {
         UUID couponUserId = coupon.getUser().getId();
         return user.getId().equals(couponUserId);
+    }
+
+    private Sort sortByCreation() {
+        return Sort.by(Sort.Direction.DESC, "createdAt");
     }
 }

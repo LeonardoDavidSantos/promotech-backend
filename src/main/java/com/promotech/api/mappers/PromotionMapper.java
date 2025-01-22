@@ -32,13 +32,14 @@ public interface PromotionMapper {
 
 	@Mappings({
 			@Mapping(source = "id", target = "id"),
-			@Mapping(source = "createdAt", target = "created_at"),
 			@Mapping(source = "title", target = "title"),
 			@Mapping(source = "description", target = "description"),
 			@Mapping(source = "imgUrl", target = "img_url"),
 			@Mapping(source = "linkUrl", target = "link_url"),
 			@Mapping(source = "price", target = "price"),
 			@Mapping(source = "category", target = "category"),
+			@Mapping(source = "createdAt", target = "created_at"),
+			@Mapping(source = "updatedAt", target = "updated_at"),
 
 			// this is safe, User -> UserPreviewDTO was in UserMapper
 			@Mapping(source = "user", target = "user"),
@@ -48,11 +49,11 @@ public interface PromotionMapper {
 
 	@Mappings({
 			@Mapping(target = "id", ignore = true),
-			@Mapping(target = "createdAt", ignore = true),
-			@Mapping(target = "updatedAt", ignore = true),
 			@Mapping(target = "store", ignore = true),
 			@Mapping(target = "category", ignore = true),
 			@Mapping(target = "user", ignore = true),
+			@Mapping(target = "createdAt", ignore = true),
+			@Mapping(target = "updatedAt", ignore = true),
 
 			@Mapping(source = "title", target = "title"),
 			@Mapping(source = "description", target = "description"),

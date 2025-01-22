@@ -11,6 +11,7 @@ import com.promotech.api.mappers.PromotionMapper;
 import com.promotech.api.repositories.PromotionRepository;
 import com.promotech.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,17 +34,18 @@ public class PromotionService {
     @Autowired
     private PromotionMapper mapper;
 
-    public Optional<PromotionResponseDTO> create(PromotionRequestDTO dto, User user) {
-        Optional<Category> category = categoryService.getById(dto.category_id());
-        Optional<Store> store = storeService.getById(dto.store_id());
+    public Optional<PromotionResponseDTO> create(PromotionRequestDTO dto, User user) throws IllegalArgumentException {
+        Category category = categoryService.getById(dto.category_id()).orElseThrow(
+                () -> new IllegalArgumentException("Invalid promotion UUID")
+        );
+        Store store = storeService.getById(dto.store_id()).orElseThrow(
+                () -> new IllegalArgumentException("Invalid promotion UUID")
+        );
 
-        if (category.isEmpty() || store.isEmpty()) {
-            throw new IllegalArgumentException("Invalid store or category");
-        }
         Promotion promotion = mapper.toEntity(dto);
         promotion.setUser(user);
-        promotion.setCategory(category.get());
-        promotion.setStore(store.get());
+        promotion.setCategory(category);
+        promotion.setStore(store);
         promotion.setIsExpired(false);
 
         return Optional.ofNullable(mapper.toDto(promotionRepository.save(promotion)));
@@ -59,28 +61,29 @@ public class PromotionService {
 
     public Optional<PromotionResponseDTO> update(PromotionUpdateDTO dto, UUID promotionId, User user) throws IllegalArgumentException, IllegalAccessException
     {
-        Optional<Promotion> promotion = promotionRepository.findById(promotionId);
-        Optional<Category> category = categoryService.getById(dto.category_id());
-        Optional<Store> store = storeService.getById(dto.store_id());
+        Promotion promotion = promotionRepository.findById(promotionId).orElseThrow(
+                () -> new IllegalArgumentException("Invalid promotion UUID")
+        );
+        Category category = categoryService.getById(dto.category_id()).orElseThrow(
+                () -> new IllegalArgumentException("Invalid category UUID")
+        );
+        Store store = storeService.getById(dto.store_id()).orElseThrow(
+                () -> new IllegalArgumentException("Invalid store UUID")
+        );
 
-        if (promotion.isEmpty() || category.isEmpty() || store.isEmpty()) {
-            throw new IllegalArgumentException("Invalid promotion, category or store");
-        }
-        if (!this.belongsToUser(user, promotion.get())) {
+        if (!this.belongsToUser(user, promotion)) {
             throw new IllegalAccessException("Promotion don't belongs to user");
         }
+        mapper.updateEntityFromDto(dto, promotion);
+        promotion.setCategory(category);
+        promotion.setStore(store);
 
-        Promotion dbPromotion = promotion.get();
-        mapper.updateEntityFromDto(dto, dbPromotion);
-
-        dbPromotion.setCategory(category.get());
-        dbPromotion.setStore(store.get());
-
-        return Optional.ofNullable(mapper.toDto(promotionRepository.save(dbPromotion)));
+        return Optional.ofNullable(mapper.toDto(promotionRepository.save(promotion)));
     }
 
     public List<PromotionResponseDTO> listAll() {
-        return promotionRepository.findAll().stream().map(mapper::toDto).toList();
+        return promotionRepository.findAll(sortByCreation())
+                .stream().map(mapper::toDto).toList();
     }
 
     public List<PromotionResponseDTO> listFromUser(UUID id) {
@@ -91,5 +94,9 @@ public class PromotionService {
     private boolean belongsToUser(User user, Promotion promotion) {
         UUID promotionUserId = promotion.getUser().getId();
         return user.getId().equals(promotionUserId);
+    }
+
+    private Sort sortByCreation() {
+        return Sort.by(Sort.Direction.DESC, "createdAt");
     }
 }

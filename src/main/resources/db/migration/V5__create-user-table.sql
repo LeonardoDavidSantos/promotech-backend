@@ -4,5 +4,8 @@ CREATE TABLE users (
     password TEXT NOT NULL,
     role TEXT NOT NULL,
     full_name TEXT NOT NULL,
-    email TEXT NOT NULL
+    email TEXT NOT NULL,
+
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );

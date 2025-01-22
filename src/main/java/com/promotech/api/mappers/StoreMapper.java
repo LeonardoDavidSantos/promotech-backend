@@ -15,7 +15,11 @@ public interface StoreMapper {
     
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(source = "description", target = "name"),
+            @Mapping(target = "createdAt", ignore = true),
+            @Mapping(target = "updatedAt", ignore = true),
+
+            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "description", target = "description"),
             @Mapping(source = "img_url", target = "imgUrl"),
             @Mapping(source = "link_url", target = "linkUrl"),
             @Mapping(source = "tag", target = "tag"),
@@ -29,11 +33,16 @@ public interface StoreMapper {
             @Mapping(source = "imgUrl", target = "img_url"),
             @Mapping(source = "linkUrl", target = "link_url"),
             @Mapping(source = "tag", target = "tag"),
+            @Mapping(source = "createdAt", target = "created_at"),
+            @Mapping(source = "updatedAt", target = "updated_at"),
     })
     StoreResponseDTO toDto(Store entity);
 
     @Mappings({
             @Mapping(target = "id", ignore = true),
+            @Mapping(target = "createdAt", ignore = true),
+            @Mapping(target = "updatedAt", ignore = true),
+
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "description", target = "description"),
             @Mapping(source = "img_url", target = "imgUrl"),

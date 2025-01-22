@@ -31,13 +31,13 @@ public class PromotionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Object> create(Authentication auth, @RequestBody @Valid PromotionRequestDTO dto) {
+    public ResponseEntity<Object> create(Authentication auth, @RequestBody @Valid PromotionRequestDTO dto) throws IllegalArgumentException {
         User user = (User) auth.getPrincipal();
         return ResponseEntity.ok(promotionService.create(dto, user));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid PromotionUpdateDTO dto, @PathVariable(name = "id") UUID id) throws  IllegalAccessException {
+    public ResponseEntity<Object> update(Authentication auth, @RequestBody @Valid PromotionUpdateDTO dto, @PathVariable(name = "id") UUID id) throws IllegalAccessException, IllegalArgumentException {
         User user = (User) auth.getPrincipal();
         return ResponseEntity.ok(promotionService.update(dto, id, user));
     }
@@ -51,6 +51,11 @@ public class PromotionController {
 
     @ExceptionHandler(IllegalAccessException.class)
     public ResponseEntity<Object> handleDeniedException(final IllegalAccessException ex) {
-        return new ResponseEntity("Access Denied", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity("Access Denied: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleArgumentException(final IllegalAccessException ex) {
+        return new ResponseEntity("Illegal Argument: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

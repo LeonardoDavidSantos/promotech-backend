@@ -47,7 +47,7 @@ public class UserService {
         return new LoginResponseDTO(token);
     }
 
-    public void register(RegisterRequestDTO dto, UserRole role) {
+    public void register(RegisterRequestDTO dto, UserRole role) throws IllegalArgumentException {
         if (userRepository.findByUsername(dto.username()) != null || dto.username().equalsIgnoreCase("admin")) {
             throw new IllegalArgumentException("Username já em uso.");
         }
